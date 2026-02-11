@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notas-rolling
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: notas-rolling
+  template:
+    metadata:
+      labels:
+        app: notas-rolling
+    spec:
+      containers:
+        - name: notas
+          image: notas-api:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notas-rolling-svc
+spec:
+  type: NodePort
+  selector:
+    app: notas-rolling
+  ports:
+    - port: 80
+      targetPort: 5000

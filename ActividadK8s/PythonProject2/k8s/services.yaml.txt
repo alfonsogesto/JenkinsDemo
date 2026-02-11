@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: notas-a-svc
+spec:
+  type: NodePort
+  selector:
+    app: notas
+    instance: a
+  ports:
+    - port: 80
+      targetPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notas-b-svc
+spec:
+  type: NodePort
+  selector:
+    app: notas
+    instance: b
+  ports:
+    - port: 80
+      targetPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notas-c-svc
+spec:
+  type: NodePort
+  selector:
+    app: notas
+    instance: c
+  ports:
+    - port: 80
+      targetPort: 5000
