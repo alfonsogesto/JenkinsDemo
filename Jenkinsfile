@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Demo') {
       steps {
-        sh 'echo "Hola desde Jenkins en Linux"'
+        sh 'echo "Hola Jenkins"'
         sh 'echo "Branch: $BRANCH_NAME"'
         sh 'ls -la'
       }
