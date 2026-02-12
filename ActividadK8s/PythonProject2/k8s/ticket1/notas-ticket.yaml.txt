@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: notas-ticket
+  labels:
+    app: notas-ticket
+spec:
+  containers:
+    - name: notas
+      image: notas-api:v1
+      ports:
+        - containerPort: 5000
