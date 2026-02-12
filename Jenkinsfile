@@ -1,11 +1,25 @@
 pipeline {
   agent any
+
   stages {
-    stage('Demo') {
+    stage('Checkout') {
       steps {
-        sh 'echo "Hola Jenkins"'
-        sh 'echo "Branch: $BRANCH_NAME"'
-        sh 'ls -la'
+        checkout scm
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        sh '''
+          # main => v2, otras ramas => v1
+          if [ "$BRANCH_NAME" = "main" ]; then
+            kubectl set image deployment/notas-rolling notas=notas-api:v2
+          else
+            kubectl set image deployment/notas-rolling notas=notas-api:v1
+          fi
+
+          kubectl rollout status deployment/notas-rolling
+        '''
       }
     }
   }
