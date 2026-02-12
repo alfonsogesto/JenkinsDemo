@@ -8,10 +8,20 @@ pipeline {
       }
     }
 
+    stage('Install kubectl') {
+      steps {
+        sh '''
+          set -e
+          curl -L -o kubectl https://dl.k8s.io/release/v1.35.0/bin/linux/amd64/kubectl
+          chmod +x kubectl
+        '''
+      }
+    }
+
     stage('Deploy') {
       steps {
         sh '''
-          kubectl apply -f ActividadK8s/PythonProject2/k8s/ticket1/notas-ticket.yaml
+          ./kubectl apply -f ActividadK8s/PythonProject2/k8s/ticket1/notas-ticket.yaml
         '''
       }
     }
