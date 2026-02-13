@@ -3,13 +3,19 @@ pipeline {
 
   stages {
     stage('Checkout') {
-      steps { checkout scm }
+      steps {
+        checkout scm
+      }
     }
 
     stage('Kubectl (cache)') {
       steps {
         sh '''
           set -e
+
+          # Nos movemos a /tmp porque en el home a veces no hay permisos de escritura
+          cd /tmp
+
           if [ ! -x "./kubectl" ]; then
             echo "Downloading kubectl (first time only)..."
             curl -fL --retry 3 --retry-delay 2 --max-time 120 \
@@ -18,7 +24,8 @@ pipeline {
           else
             echo "Using cached kubectl"
           fi
-          ./kubectl version --client --short
+
+          ./kubectl version --client
         '''
       }
     }
@@ -27,10 +34,11 @@ pipeline {
       steps {
         sh '''
           set -e
-          ./kubectl apply -f ActividadK8s/PythonProject2/k8s/ticket1/notas-ticket.yaml
+          cd /tmp
+
+          ./kubectl apply -f $WORKSPACE/ActividadK8s/PythonProject2/k8s/ticket1/notas-ticket.yaml
         '''
       }
     }
   }
 }
-
